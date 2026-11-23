@@ -6,7 +6,10 @@
 #include "input.h"
 
 #define PER_HALAMAN  20
-#define LEBAR_TABEL  132   
+#define LEBAR_TABEL  136 
+#define LEBAR_ID      30
+#define LEBAR_JUDUL   50
+#define LEBAR_PENULIS 20
 
 #define TAHUN_MIN    1
 #define TAHUN_MAX    2100
@@ -24,16 +27,46 @@ static void garis(void) {
 }
 
 static void tampil_header(void) {
-    printf("%-5s %-26s %-50s %-20s %-10s %-5s %-5s %-4s\n",
+    printf("%-5s %-30s %-50s %-20s %-10s %-5s %-5s %-4s\n",
            "No", "ID", "Judul", "Penulis", "Penerbit",
            "Tahun", "Hal", "Stok");
     garis();
 }
 
+static size_t ambil_bagian(const char *s, size_t lebar) {
+    size_t n = strlen(s);
+    return (n > lebar) ? lebar : n;
+}
+
+
 static void tampil_baris(int no, const Buku *b) {
-    printf("%-5d %-26.26s %-50.50s %-20.20s %-10.10s %-5d %-5d %-4d\n",
-           no, b->ocaid, b->title, b->author, b->publisher,
-           b->year, b->page_count, b->stok);
+    const char *jdl = b->title;
+    const char *pnl = b->author;
+    size_t nj, np;
+    int pertama = 1;
+
+    do {
+        nj = ambil_bagian(jdl, LEBAR_JUDUL);
+        np = ambil_bagian(pnl, LEBAR_PENULIS);
+
+        if (pertama) {
+            printf("%-5d %-*.*s %-*.*s %-*.*s %-10.10s %-5d %-5d %-4d\n",
+                   no,
+                   LEBAR_ID, LEBAR_ID, b->ocaid,
+                   LEBAR_JUDUL, (int)nj, jdl,
+                   LEBAR_PENULIS, (int)np, pnl,
+                   b->publisher, b->year, b->page_count, b->stok);
+            pertama = 0;
+        } else {
+            printf("%-5s %-*s %-*.*s %-*.*s\n",
+                   "", LEBAR_ID, "",
+                   LEBAR_JUDUL, (int)nj, jdl,
+                   LEBAR_PENULIS, (int)np, pnl);
+        }
+
+        jdl += nj;
+        pnl += np;
+    } while (*jdl != '\0' || *pnl != '\0');
 }
 
 static int teks_valid(const char *s, int boleh_spasi) {
