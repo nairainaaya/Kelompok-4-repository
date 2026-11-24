@@ -58,7 +58,7 @@ mingw32-make
 Hasilnya berupa program `perpustakaan` (di Windows: `perpustakaan.exe`).
 
 **Tanpa Makefile (manual):**
-gcc -Wall -Wextra -o perpustakaan main.c auth.c buku.c data.c input.c sorting.c transaksi.c
+gcc -Wall -o perpustakaan main.c auth.c buku.c data.c input.c sorting.c transaksi.c
 
 
 ### Menjalankan Program
