@@ -28,7 +28,7 @@ input.c/.h	Pembaca input aman: baca_int, baca_string, konfirmasi
 
 File Data
 Books.txt	spasi, dengan tanda petik untuk judul dan penulis	Sumber awal, hanya dibaca
-katalog.txt	ocaid;title;author;publisher;year;page_count;stok	Dibuat otomatis dari Books.txt saat pertama jalan; stok awal 3
+katalog.txt	ocaid;title;author;year;page_count;stok	Dibuat otomatis dari Books.txt saat pertama jalan; stok awal 3
 user.txt	username,password,role					Akun login
 peminjaman.txt	id;username;ocaid;tanggal;status			Dibuat otomatis; status DIPINJAM atau KEMBALI
 
