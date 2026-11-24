@@ -6,7 +6,7 @@
 #include "input.h"
 
 #define PER_HALAMAN  20
-#define LEBAR_TABEL  136 
+#define LEBAR_TABEL  125 
 #define LEBAR_ID      30
 #define LEBAR_JUDUL   50
 #define LEBAR_PENULIS 20
@@ -27,9 +27,8 @@ static void garis(void) {
 }
 
 static void tampil_header(void) {
-    printf("%-5s %-30s %-50s %-20s %-10s %-5s %-5s %-4s\n",
-           "No", "ID", "Judul", "Penulis", "Penerbit",
-           "Tahun", "Hal", "Stok");
+    printf("%-5s %-30s %-50s %-20s %-5s %-5s %-4s\n",
+           "No", "ID", "Judul", "Penulis", "Tahun", "Hal", "Stok");
     garis();
 }
 
@@ -50,12 +49,12 @@ static void tampil_baris(int no, const Buku *b) {
         np = ambil_bagian(pnl, LEBAR_PENULIS);
 
         if (pertama) {
-            printf("%-5d %-*.*s %-*.*s %-*.*s %-10.10s %-5d %-5d %-4d\n",
+            printf("%-5d %-*.*s %-*.*s %-*.*s %-5d %-5d %-4d\n",
                    no,
                    LEBAR_ID, LEBAR_ID, b->ocaid,
                    LEBAR_JUDUL, (int)nj, jdl,
                    LEBAR_PENULIS, (int)np, pnl,
-                   b->publisher, b->year, b->page_count, b->stok);
+                   b->year, b->page_count, b->stok);
             pertama = 0;
         } else {
             printf("%-5s %-*s %-*.*s %-*.*s\n",
@@ -304,8 +303,7 @@ void tambah_buku(void) {
     }
 
     if (!baca_teks("Judul: ",    b.title,     (int)sizeof(b.title),     1) ||
-        !baca_teks("Penulis: ",  b.author,    (int)sizeof(b.author),    1) ||
-        !baca_teks("Penerbit: ", b.publisher, (int)sizeof(b.publisher), 1)) {
+        !baca_teks("Penulis: ",  b.author,    (int)sizeof(b.author),    1)) {
         printf("\nInput dihentikan, buku tidak ditambahkan.\n");
         return;
     }
@@ -354,13 +352,12 @@ void ubah_buku(void) {
         printf("\nPilih atribut yang ingin diubah:\n");
         printf("1. Judul\n");
         printf("2. Penulis\n");
-        printf("3. Penerbit\n");
-        printf("4. Tahun terbit\n");
-        printf("5. Jumlah halaman\n");
-        printf("6. Stok\n");
+        printf("3. Tahun terbit\n");
+        printf("4. Jumlah halaman\n");
+        printf("5. Stok\n");
         printf("0. Selesai\n");
 
-        pilihan = baca_int("Pilihan: ", 0, 6);
+        pilihan = baca_int("Pilihan: ", 0, 5);
 
         switch (pilihan) {
             case 1:
@@ -380,15 +377,6 @@ void ubah_buku(void) {
                 berubah = 1;
                 break;
             case 3:
-                if (!baca_teks("Penerbit baru: ", tmp,
-                               (int)sizeof(b->publisher), 1)) {
-                    pilihan = 0;
-                    break;
-                }
-                salin_teks(b->publisher, sizeof(b->publisher), tmp);
-                berubah = 1;
-                break;
-            case 4:
                 nilai = baca_int("Tahun baru: ", TAHUN_MIN, TAHUN_MAX);
                 if (feof(stdin)) {
                     pilihan = 0;
@@ -397,7 +385,7 @@ void ubah_buku(void) {
                 b->year = nilai;
                 berubah = 1;
                 break;
-            case 5:
+            case 4:
                 nilai = baca_int("Jumlah halaman baru: ",
                                  HALAMAN_MIN, HALAMAN_MAX);
                 if (feof(stdin)) {
@@ -407,7 +395,7 @@ void ubah_buku(void) {
                 b->page_count = nilai;
                 berubah = 1;
                 break;
-            case 6:
+            case 5:
                 nilai = baca_int("Stok baru: ", STOK_MIN, STOK_MAX);
                 if (feof(stdin)) {
                     pilihan = 0;
