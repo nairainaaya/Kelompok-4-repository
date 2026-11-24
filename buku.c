@@ -5,19 +5,20 @@
 #include "buku.h"
 #include "input.h"
 
-#define PER_HALAMAN  20
+#define PER_HALAMAN  20 // 1 halaman tampilin 20 buku aja
 #define LEBAR_TABEL  125 
 #define LEBAR_ID      30
 #define LEBAR_JUDUL   50
 #define LEBAR_PENULIS 20
 
-#define TAHUN_MIN    1
+#define TAHUN_MIN    1 // tahun 1 masehi, ini gaboleh kosong
 #define TAHUN_MAX    2100
 #define HALAMAN_MIN  1
 #define HALAMAN_MAX  100000
 #define STOK_MIN     0
 #define STOK_MAX     1000
 
+// bikin "-" sebanyak lebar tabel 
 static void garis(void) {
     int i;
     for (i = 0; i < LEBAR_TABEL; i++) {
@@ -26,18 +27,20 @@ static void garis(void) {
     putchar('\n');
 }
 
+// nampilin no id judul dll
 static void tampil_header(void) {
     printf("%-5s %-30s %-50s %-20s %-5s %-5s %-4s\n",
            "No", "ID", "Judul", "Penulis", "Tahun", "Hal", "Stok");
     garis();
 }
 
+
 static size_t ambil_bagian(const char *s, size_t lebar) {
     size_t n = strlen(s);
     return (n > lebar) ? lebar : n;
 }
 
-
+// nampilin 1 buku kalau judulnya kepanjangan dia bikin 2 baris makanya ada do while
 static void tampil_baris(int no, const Buku *b) {
     const char *jdl = b->title;
     const char *pnl = b->author;
@@ -68,6 +71,7 @@ static void tampil_baris(int no, const Buku *b) {
     } while (*jdl != '\0' || *pnl != '\0');
 }
 
+// cek input gaboleh kosong
 static int teks_valid(const char *s, int boleh_spasi) {
     if (s[0] == '\0') {
         return 0;
@@ -83,11 +87,13 @@ static int teks_valid(const char *s, int boleh_spasi) {
     return 1;
 }
 
+// nyalin teks dengan aman pakai strncpy
 static void salin_teks(char *tujuan, size_t ukuran, const char *sumber) {
     strncpy(tujuan, sumber, ukuran - 1);
     tujuan[ukuran - 1] = '\0';
 }
 
+// ngulang sampai inputnya itu valid
 static int baca_teks(const char *prompt, char *buf, int ukuran,
                      int boleh_spasi) {
     while (1) {
@@ -114,6 +120,7 @@ static void ke_huruf_kecil(const char *src, char *dst, size_t ukuran) {
     dst[i] = '\0';
 }
 
+// buat navigasi kaya n (next) p (prev) q (quit)
 static void tampil_berhalaman(const Buku arr[], const int indeks[],
                               int jumlah) {
     int halaman = 0;
@@ -173,6 +180,7 @@ static void tampil_berhalaman(const Buku arr[], const int indeks[],
     }
 }
 
+// cari buku pakai id-nya kalau ketemu balik ke nomor urutnya kalau ga ada balik ke -1
 int cari_index_buku(const char *ocaid) {
     int i;
     for (i = 0; i < jumlah_buku; i++) {
@@ -183,6 +191,8 @@ int cari_index_buku(const char *ocaid) {
     return -1;
 }
 
+// ga harus cari judul yang lengkap bisa setengahnya aja, judulnya udah diubah huruf kecil semua pakai strstr 
+// kalau mau tulis huruf besar semua gapapa dia masi tetap bisa ketemu 
 void cari_buku_by_id(void) {
     char id[64];
     int idx;
@@ -231,7 +241,7 @@ void cari_buku_by_judul(void) {
 
     for (i = 0; i < jumlah_buku; i++) {
         ke_huruf_kecil(daftar_buku[i].title, judul_kecil, sizeof(judul_kecil));
-        if (strstr(judul_kecil, kata_kecil) != NULL) {
+        if (strstr(judul_kecil, kata_kecil) != NULL) { // strstr ini dia untuk nyari kata di dalam kalimat
             hasil[ditemukan++] = i;
         }
     }
@@ -285,6 +295,7 @@ void tampil_katalog(int hanya_tersedia) {
     tampil_tabel_buku(daftar_buku, jumlah_buku, hanya_tersedia);
 }
 
+// tanya id, judul dll di cek ada atau ga kalau ada ditolak kalau ada ya disimpan pakai simpan_katalog
 void tambah_buku(void) {
     Buku b;
 
@@ -325,7 +336,7 @@ void tambah_buku(void) {
     }
 }
 
-
+// cari pakai id muncul menu ubah apa misal judul atau penulisnya selama belum pencet 0 dia ngulang terus pake do while
 void ubah_buku(void) {
     char id[64];
     char tmp[1280];   
@@ -417,6 +428,8 @@ void ubah_buku(void) {
     }
 }
 
+// cari id ditanya konfirmasi "yakin hapus buku" kalau iya bakal dihapus 
+// buku dibelakangnya bakal maju pakai for(j=idx;...)
 void hapus_buku(void) {
     char id[64];
     char prompt[320];
