@@ -5,7 +5,6 @@ typedef struct {
     char ocaid[64];
     char title[1280];
     char author[512];
-    char publisher[128];
     int  year;
     int  page_count;
     int  stok;
